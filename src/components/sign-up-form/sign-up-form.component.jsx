@@ -3,7 +3,7 @@ import FormInput from "../form-input/form-input.component";
 import {
   createAuthUserWithEmailAndPassword,
   createUserDocumentFromAuth,
-} from "../../routes/utils/firebase/firebase.utils";
+} from "../../utils1/firebase/firebase.utils";
 import './sign-up-form.style.scss'
 import Button from "../button/button.component";
 const defaultFormFields = {
