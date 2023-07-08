@@ -1,30 +1,49 @@
+import { Fragment, useContext } from 'react';
+import { Outlet, Link } from 'react-router-dom';
 
+import CartIcon from '../../components/cart-icon/cart-icon.component';
+import CartDropdown from '../../components/cart-dropdown/cart-dropdown.component';
 
-import { Outlet,Link } from "react-router-dom";
-import { Fragment } from "react";
-import {ReactComponent as CrwnLogo} from  '../../assets/crown.svg';
-import './Navigation.styles.scss';
+import { UserContext } from '../../context/user.context';
+import { CartContext } from '../../context/cart.context';
+
+import { ReactComponent as CrwnLogo } from '../../assets/crown.svg';
+import { signOutUser } from '../../utils1/firebase/firebase.utils';
+
+import {
+  NavigationContainer,
+  LogoContainer,
+  NavLinks,
+  NavLink,
+} from './Navigation.styles.jsx';
+
 const Navigation = () => {
-    return (
-      <Fragment>
-        <div className='navigation'>
+  const { currentUser } = useContext(UserContext);
+  const { isCartOpen } = useContext(CartContext);
 
-        <Link className='logo-container' to='/'>
-       <CrwnLogo className='logo'/>
-        </Link>
-        
-         <div className='nav-links-container'>
-         <Link className='nav-link' to='/shop'>
-         Shop
-         </Link>
-         <Link className='nav-link' to='/auth'>
-         Sign-In
-         </Link>
+  return (
+    <Fragment>
+      <NavigationContainer>
+        <LogoContainer to='/'>
+          <CrwnLogo />
+        </LogoContainer>
+        <NavLinks>
+          <NavLink to='/shop'>SHOP</NavLink>
 
-         </div>
-        </div>
-        <Outlet />
-      </Fragment>
-    );
-  };
-  export default Navigation;
+          {currentUser ? (
+            <NavLink as='span' onClick={signOutUser}>
+              SIGN OUT
+            </NavLink>
+          ) : (
+            <NavLink to='/auth'>SIGN IN</NavLink>
+          )}
+          <CartIcon />
+        </NavLinks>
+        {isCartOpen && <CartDropdown />}
+      </NavigationContainer>
+      <Outlet />
+    </Fragment>
+  );
+};
+
+export default Navigation;
